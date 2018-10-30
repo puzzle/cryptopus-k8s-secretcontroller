@@ -2,12 +2,12 @@
 apiVersion: rbac.authorization.k8s.io/v1beta1
 kind: ClusterRoleBinding
 metadata:
-  name: mobi:app:vaultsecretcontroller
+  name: puzzle:app:cryptopussecretcontroller
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: mobi:app:vaultsecretcontroller
+  name: puzzle:app:cryptopussecretcontroller
 subjects:
 - kind: ServiceAccount
-  name: vaultsecretcontroller
+  name: default
   namespace: pitc-cryptopussecretcontroller-dev

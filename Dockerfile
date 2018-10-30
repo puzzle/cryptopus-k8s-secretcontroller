@@ -1,3 +1,4 @@
 FROM scratch
-COPY ./vaultsecretcontroller ./
-ENTRYPOINT ["./vaultsecretcontroller", "-logtostderr"]
+USER nobody
+COPY ./cryptopussecretcontroller ./
+ENTRYPOINT ["./cryptopussecretcontroller", "-logtostderr", "-v", "4"]

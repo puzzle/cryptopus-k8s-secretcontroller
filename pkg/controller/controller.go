@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"time"
 	"net/http"
+	"crypto/tls"
 	"io/ioutil"
 	"encoding/json"
 	"encoding/base64"
@@ -73,7 +74,8 @@ const (
 
 	MessageCryptopusAPIConfigNotFound = "Secret '%s' with Cryptopus API Details not found"
 	MessageCryptopusAPIInvalid = "Cryptopus API Config Invalid. Make sure secret '%s' contains CRYPTOPUS_API, CRYPTOPUS_API_USER, CRYPTOPUS_API_TOKEN"
-	MessageCryptopusAPIFailed = "Unable to create HTTP Client for Cryptopus API: '%s'"
+	MessageCryptopusAPIFailed = "Unable to make request to Cryptopus API: '%s': %s"
+	MessageCryptopusAPINewRequestFailed = "Unable to create HTTP Request Client for Cryptopus API: '%s': %s"
 
 	MessageFailed = "Unable to get Secret from Cryptopus: %s"
 
@@ -474,13 +476,19 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 		return false
 	}
 
-	client := &http.Client{}
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify : true},
+	}
+	client := &http.Client{Transport: tr}
 
 	url := fmt.Sprintf("%s/api/accounts/%d}", cryptopus_api, secretClaim.Spec.Id)
+	//msg := fmt.Sprintf("API: %s, User: %s, Token: %s", cryptopus_api, cryptopus_api_user, cryptopus_api_token)
+	//glog.V(4).Infof(msg)
+
 	req, err := http.NewRequest("GET", url , nil)
 
 	if err != nil {
-		msg := fmt.Sprintf(MessageCryptopusAPIFailed, cryptopus_api)
+		msg := fmt.Sprintf(MessageCryptopusAPINewRequestFailed, cryptopus_api, err)
 		glog.V(4).Infof(msg)
 		secretClaim.Status.Phase = "Error"
 		c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
@@ -494,7 +502,7 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 
 
 	if err != nil {
-			msg := fmt.Sprintf(MessageCryptopusAPIFailed, cryptopus_api)
+			msg := fmt.Sprintf(MessageCryptopusAPIFailed, cryptopus_api, err)
 			glog.V(4).Infof(msg)
 			secretClaim.Status.Phase = "Error"
 			c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
@@ -512,6 +520,9 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 		return false
 	}
 
+	//msg = fmt.Sprintf("Cryptopus Request: %s", body)
+	//glog.V(4).Infof(msg)
+
 	var cryptopus_response CryptopusResponse
 	err = json.Unmarshal(body, &cryptopus_response)
 
@@ -522,6 +533,11 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 	// If the resource doesn't exist, we'll create it
 	if errors.IsNotFound(err) {
 	  secret, err = c.kubeclientset.CoreV1().Secrets(secretClaim.Namespace).Create(newSecret(c, secretClaim))
+
+		if err != nil {
+			msg := fmt.Sprintf("Failed to create secret: %s", err)
+			glog.V(4).Infof(msg)
+		}
 	}
 	// copy to work with
 	secretcopy := secret.DeepCopy()
