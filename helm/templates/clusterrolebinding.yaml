@@ -1,0 +1,14 @@
+{{if .Capabilities.APIVersions.Has "rbac.authorization.k8s.io/v1beta1"}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: mobi:app:vaultsecretcontroller
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: mobi:app:vaultsecretcontroller
+subjects:
+- kind: ServiceAccount
+  name: vaultsecretcontroller
+  namespace: {{.Release.Namespace}}
+{{end}}
