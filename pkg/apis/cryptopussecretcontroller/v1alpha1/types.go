@@ -34,7 +34,7 @@ type SecretClaim struct {
 
 // SecretClaimSpec is the spec for a Foo resource
 type SecretClaimSpec struct {
-	Id int32 `json:"id"`
+	Id []int32 `json:"id"`
 	SecretName string `json:"secretName"`
 	RefreshTime int32 `json:"refreshTime"`
 	CryptopusSecret string `json:"cryptopusSecret"`

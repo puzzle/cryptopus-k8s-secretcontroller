@@ -448,7 +448,7 @@ func (c *Controller) handleObject(obj interface{}) {
 
 // Update a Secret with Values from Vault
 func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret *corev1.Secret) bool {
-	glog.V(4).Infof("Update Secret: '%s' for SecretClaim: '%s'", secretClaim.Spec.SecretName, secretClaim.Name)
+	glog.Info("Update Secret: '%s' for SecretClaim: '%s'", secretClaim.Spec.SecretName, secretClaim.Name)
 
 
 	secretNamespace, secretName, err := cache.SplitMetaNamespaceKey(secretClaim.Spec.CryptopusSecret)
@@ -476,55 +476,24 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 		return false
 	}
 
-	tr := &http.Transport{
-		TLSClientConfig: &tls.Config{InsecureSkipVerify : true},
-	}
-	client := &http.Client{Transport: tr}
+	var cryptopus_responses []CryptopusResponse
 
-	url := fmt.Sprintf("%s/api/accounts/%d}", cryptopus_api, secretClaim.Spec.Id)
-	//msg := fmt.Sprintf("API: %s, User: %s, Token: %s", cryptopus_api, cryptopus_api_user, cryptopus_api_token)
-	//glog.V(4).Infof(msg)
+	for i := range secretClaim.Spec.Id {
 
-	req, err := http.NewRequest("GET", url , nil)
-
-	if err != nil {
-		msg := fmt.Sprintf(MessageCryptopusAPINewRequestFailed, cryptopus_api, err)
-		glog.V(4).Infof(msg)
-		secretClaim.Status.Phase = "Error"
-		c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
-		return false
-	}
-
-	// Authenticatoin Header
-	req.Header.Add("Authorization-User", cryptopus_api_user)
-	req.Header.Add("Authorization-Password", cryptopus_api_token)
-	resp, err := client.Do(req)
-
-
-	if err != nil {
-			msg := fmt.Sprintf(MessageCryptopusAPIFailed, cryptopus_api, err)
-			glog.V(4).Infof(msg)
-			secretClaim.Status.Phase = "Error"
-			c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
+		cryptopus_response := getSecret(c, secretClaim,  secretClaim.Spec.Id[i], cryptopus_api, cryptopus_api_user, cryptopus_api_token )
+		if cryptopus_response == nil {
 			return false
 		}
 
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-
-	if resp.StatusCode != 200 {
-		msg := fmt.Sprintf(MessageFailed, body)
-		glog.V(4).Infof(msg)
-		secretClaim.Status.Phase = "Error"
-		c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
-		return false
+		cryptopus_responses = append(cryptopus_responses, *cryptopus_response )
 	}
 
-	//msg = fmt.Sprintf("Cryptopus Request: %s", body)
-	//glog.V(4).Infof(msg)
 
-	var cryptopus_response CryptopusResponse
-	err = json.Unmarshal(body, &cryptopus_response)
+
+	for i := range cryptopus_responses {
+		glog.V(4).Infof(fmt.Sprintf("Username: %s", cryptopus_responses[i].Data.Account.CleartextUsername))
+	}
+
 
 
 	// Get the Secret with the secretName specified in SecretClaim.spec
@@ -546,8 +515,11 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 	// Update Secret
 	annotations := map[string]string{}
 	secretcopy.ObjectMeta.Annotations = annotations
-	data := make(map[string][]byte, 1)
-	data[cryptopus_response.Data.Account.CleartextUsername] = []byte(cryptopus_response.Data.Account.CleartextPassword)
+	data := make(map[string][]byte, len(cryptopus_responses))
+	for i := range cryptopus_responses {
+		data[cryptopus_responses[i].Data.Account.CleartextUsername] = []byte(cryptopus_responses[i].Data.Account.CleartextPassword)
+	}
+
 	secretcopy.Data = data
 
 
@@ -560,6 +532,59 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 	return true
 }
 
+func getSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, cryptopus_account_id int32, cryptopus_api string, cryptopus_api_user string, cryptopus_api_token string ) *CryptopusResponse {
+
+
+	tr := &http.Transport{
+		TLSClientConfig: &tls.Config{InsecureSkipVerify : true},
+	}
+	client := &http.Client{Transport: tr}
+
+	url := fmt.Sprintf("%s/api/accounts/%d}", cryptopus_api, cryptopus_account_id)
+	msg := fmt.Sprintf("API: %s, URL: %s, User: %s, Token: %s", cryptopus_api, url, cryptopus_api_user, cryptopus_api_token)
+	glog.V(4).Infof(msg)
+
+	req, err := http.NewRequest("GET", url , nil)
+
+	if err != nil {
+		msg := fmt.Sprintf(MessageCryptopusAPINewRequestFailed, cryptopus_api, err)
+		glog.V(4).Infof(msg)
+		secretClaim.Status.Phase = "Error"
+		c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
+		return nil
+	}
+
+	// Authenticatoin Header
+	req.Header.Add("Authorization-User", cryptopus_api_user)
+	req.Header.Add("Authorization-Password", cryptopus_api_token)
+	resp, err := client.Do(req)
+
+
+	if err != nil {
+			msg := fmt.Sprintf(MessageCryptopusAPIFailed, cryptopus_api, err)
+			glog.V(4).Infof(msg)
+			secretClaim.Status.Phase = "Error"
+			c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
+			return nil
+		}
+
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+
+	if resp.StatusCode != 200 {
+		msg := fmt.Sprintf(MessageFailed, body)
+		glog.V(4).Infof(msg)
+		secretClaim.Status.Phase = "Error"
+		c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)
+		return nil
+	}
+
+
+	var cryptopus_response CryptopusResponse
+	err = json.Unmarshal(body, &cryptopus_response)
+
+	return &cryptopus_response
+}
 
 
 // newSecret creates a new Secret for a SecretClaim resource. It also sets

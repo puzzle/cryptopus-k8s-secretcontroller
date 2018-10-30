@@ -15,14 +15,14 @@ metadata:
   name: testclaim
 spec:
   secretName: test
-  id: 2256
+  id: [ 2256 ]
   refreshTime: 3600
   cryptopusSecret: pitc-cryptopussecretcontroller-dev/cryptopuspuzzlesplattner
 ```
 
 
 * `secretName`: is the Name of the Secret that will be created
-* `id`: Id of the Cryptopus Account to get
+* `id`: Array of Ids for the Cryptopus Account to get
 * `refreshTime`: if > 0, Time after which a Secrets gets an Update with Values from Hashicorp Vault. Defaults to 0, and the `CONTROLLER_DEFAULT_REFRESH_TIME` (See Env Vars) is used
 * `cryptopusSecret`: Secret with Cryptopus API Details (URL, Username, Token)
 
@@ -82,6 +82,7 @@ rules:
   - cryptopussecretcontroller.puzzle.ch
   resources:
   - secretclaims
+  - secretclaims/finalizers
   verbs:
   - '*'
 - apiGroups:

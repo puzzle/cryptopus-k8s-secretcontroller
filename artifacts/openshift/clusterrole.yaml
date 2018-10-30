@@ -13,6 +13,7 @@ rules:
   - cryptopussecretcontroller.puzzle.ch
   resources:
   - secretclaims
+  - secretclaims/finalizers
   verbs:
   - '*'
 - apiGroups:
