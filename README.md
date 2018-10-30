@@ -44,6 +44,10 @@ data:
 * `CRYPTOPUS_API_USER`: Cryptopus API User with Access to the Accounts you need (base64 encoded)
 * `CRYPTOPUS_API_TOKEN`: Cryptopus Token for API User (base64 encoded)
 
+## Remarks
+
+In Openshift 3.7, Secrets are not automaticly deleted when the SecretClaim is deleted. So you have you remove it manually, otherwise you can't use the same Secret Name again with a SecretClaim
+
 
 ## Configuration
 
