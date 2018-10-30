@@ -77,12 +77,13 @@ const (
 	MessageCryptopusAPIFailed = "Unable to make request to Cryptopus API: '%s': %s"
 	MessageCryptopusAPINewRequestFailed = "Unable to create HTTP Request Client for Cryptopus API: '%s': %s"
 
-	MessageFailed = "Unable to get Secret from Cryptopus: %s"
+	MessageFailed = "Unable to get Secret for Account %s sfrom Cryptopus: %s"
 
 	MessageSecretClaimValueRequired = "The value '%s' is required in Secretclaim '%s'"
 
 
 )
+
 
 type CryptopusAccountDetail struct{
     Id      int32 `json:"id"`
@@ -453,7 +454,6 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 
 	cryptopusSecret, err := c.secretsLister.Secrets(secretNamespace).Get(secretName)
 	if errors.IsNotFound(err) {
-
 		msg := fmt.Sprintf(MessageCryptopusAPIConfigNotFound, secretName)
 		glog.V(4).Infof(msg)
 		secretClaim.Status.Phase = "Error"
@@ -466,7 +466,6 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 	cryptopus_api_token := base64.StdEncoding.EncodeToString(cryptopusSecret.Data["CRYPTOPUS_API_TOKEN"])
 
 	if len(cryptopus_api) == 0 || len(cryptopus_api_user) == 0 || len(cryptopus_api_token) == 0 {
-
 		msg := fmt.Sprintf(MessageCryptopusAPIInvalid, secretName)
 		glog.V(4).Infof(msg)
 		secretClaim.Status.Phase = "Error"
@@ -477,21 +476,12 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 	var cryptopus_responses []CryptopusResponse
 
 	for i := range secretClaim.Spec.Id {
-
 		cryptopus_response := getSecret(c, secretClaim,  secretClaim.Spec.Id[i], cryptopus_api, cryptopus_api_user, cryptopus_api_token )
 		if cryptopus_response == nil {
-			return false
+			continue
 		}
-
 		cryptopus_responses = append(cryptopus_responses, *cryptopus_response )
 	}
-
-
-
-	for i := range cryptopus_responses {
-		glog.V(4).Infof(fmt.Sprintf("Username: %s", cryptopus_responses[i].Data.Account.CleartextUsername))
-	}
-
 
 
 	// Get the Secret with the secretName specified in SecretClaim.spec
@@ -515,8 +505,8 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 	secretcopy.ObjectMeta.Annotations = annotations
 	data := make(map[string][]byte, len(cryptopus_responses))
 	for i := range cryptopus_responses {
-		data["username"] = []byte(cryptopus_responses[i].Data.Account.CleartextUsername)
-		data["password"] = []byte(cryptopus_responses[i].Data.Account.CleartextPassword)
+		data[fmt.Sprintf("username_%d", cryptopus_responses[i].Data.Account.Id)] = []byte(cryptopus_responses[i].Data.Account.CleartextUsername)
+		data[fmt.Sprintf("password_%d", cryptopus_responses[i].Data.Account.Id)] = []byte(cryptopus_responses[i].Data.Account.CleartextPassword)
 	}
 
 	secretcopy.Data = data
@@ -535,6 +525,7 @@ func getSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, cryptopus
 
 
 	tr := &http.Transport{
+		// TODO: fore some Reason, we cannot verify the Certificate in our OpenShift Cluster, when running the Controller in Cluster.. I have to investigate this.
 		TLSClientConfig: &tls.Config{InsecureSkipVerify : true},
 	}
 	client := &http.Client{Transport: tr}
@@ -571,7 +562,7 @@ func getSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, cryptopus
 	body, err := ioutil.ReadAll(resp.Body)
 
 	if resp.StatusCode != 200 {
-		msg := fmt.Sprintf(MessageFailed, body)
+		msg := fmt.Sprintf(MessageFailed, cryptopus_account_id, body)
 		glog.V(4).Infof(msg)
 		secretClaim.Status.Phase = "Error"
 		c.recorder.Event(secretClaim, corev1.EventTypeWarning, FailedSynced, msg)

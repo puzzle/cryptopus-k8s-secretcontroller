@@ -47,14 +47,14 @@ data:
 
 ## Resulting Secret
 
-The Secret created by a SecretClaim will have a username, password key in the Data Section:
+The Secret created by a SecretClaim will have a username, password key in the Data Section. username and password will have the account id as suffix. This allows to store more than one Cryptopus Account in the Secret.
 
 
 ```yaml
 apiVersion: v1
 data:
-  password: ...
-  username: ....
+  password_2256: ...
+  username_2256: ....
 kind: Secret
 metadata:
   name: mysecret
