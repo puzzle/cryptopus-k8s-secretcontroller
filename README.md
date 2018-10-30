@@ -23,7 +23,7 @@ spec:
 
 * `secretName`: is the Name of the Secret that will be created
 * `id`: Array of Ids for the Cryptopus Account to get
-* `refreshTime`: if > 0, Time after which a Secrets gets an Update with Values from Hashicorp Vault. Defaults to 0, and the `CONTROLLER_DEFAULT_REFRESH_TIME` (See Env Vars) is used
+* `refreshTime`: if > 0, Time after which a Secrets gets an Update with Values from Cryptopus. Defaults to 0, and the `CONTROLLER_DEFAULT_REFRESH_TIME` (See Env Vars) is used
 * `cryptopusSecret`: Secret with Cryptopus API Details (URL, Username, Token)
 
 ## Secret with Cryptopus API Details
