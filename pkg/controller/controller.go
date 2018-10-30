@@ -448,8 +448,6 @@ func (c *Controller) handleObject(obj interface{}) {
 
 // Update a Secret with Values from Vault
 func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret *corev1.Secret) bool {
-	glog.Info("Update Secret: '%s' for SecretClaim: '%s'", secretClaim.Spec.SecretName, secretClaim.Name)
-
 
 	secretNamespace, secretName, err := cache.SplitMetaNamespaceKey(secretClaim.Spec.CryptopusSecret)
 
@@ -517,7 +515,8 @@ func updateSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, secret
 	secretcopy.ObjectMeta.Annotations = annotations
 	data := make(map[string][]byte, len(cryptopus_responses))
 	for i := range cryptopus_responses {
-		data[cryptopus_responses[i].Data.Account.CleartextUsername] = []byte(cryptopus_responses[i].Data.Account.CleartextPassword)
+		data["username"] = []byte(cryptopus_responses[i].Data.Account.CleartextUsername)
+		data["password"] = []byte(cryptopus_responses[i].Data.Account.CleartextPassword)
 	}
 
 	secretcopy.Data = data
@@ -541,7 +540,7 @@ func getSecret(c *Controller, secretClaim *samplev1alpha1.SecretClaim, cryptopus
 	client := &http.Client{Transport: tr}
 
 	url := fmt.Sprintf("%s/api/accounts/%d}", cryptopus_api, cryptopus_account_id)
-	msg := fmt.Sprintf("API: %s, URL: %s, User: %s, Token: %s", cryptopus_api, url, cryptopus_api_user, cryptopus_api_token)
+	msg := fmt.Sprintf("API: %s, URL: %s, User: %s", cryptopus_api, url, cryptopus_api_user)
 	glog.V(4).Infof(msg)
 
 	req, err := http.NewRequest("GET", url , nil)
