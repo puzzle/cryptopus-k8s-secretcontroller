@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cryptopuspuzzlesplattner
+  name: cryptopuspuzzles
 type: Opaque
 data:
   CRYPTOPUS_API: aHR0cHM6Ly9jcnlwdG9wdXMucHV6emxlLmNo
-  CRYPTOPUS_API_USER: c3BsYXR0bmVyLWRhYzEzMA==
-  CRYPTOPUS_API_TOKEN: MmQ1MDE1ZWVmYmFjNThmYTI1MmUzMzJmMzZiYjljNDk=
+  CRYPTOPUS_API_USER:
+  CRYPTOPUS_API_TOKEN:
