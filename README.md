@@ -17,7 +17,7 @@ spec:
   secretName: mysecret
   id: [ 2256 ]
   refreshTime: 3600
-  cryptopusSecret: pitc-cryptopussecretcontroller-dev/cryptopuspuzzlesplattner
+  cryptopusSecret: my-namespace/cryptopuspuzzlesplattner
 ```
 
 * `secretName`: is the Name of the Secret that will be created
@@ -148,92 +148,8 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: default
-  namespace: pitc-cryptopussecretcontroller-dev
+  namespace: my-namespace
 ```
-
-### ImageStream
-
-```yaml
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  labels:
-    app: secretcontroller
-  name: secretcontroller
-spec:
-  lookupPolicy:
-    local: false
-  tags:
-  - annotations:
-      openshift.io/imported-from: puzzle/cryptopus-k8s-secretcontroller
-    from:
-      kind: DockerImage
-      name: puzzle/cryptopus-k8s-secretcontroller
-    importPolicy: {}
-    name: latest
-    referencePolicy:
-      type: Source
-```
-
-### Deployment
-
-
-```yaml
-apiVersion: v1
-items:
-- apiVersion: apps.openshift.io/v1
-  kind: DeploymentConfig
-  metadata:
-    labels:
-      app: secretcontroller
-    name: secretcontroller
-  spec:
-    replicas: 1
-    selector:
-      app: secretcontroller
-      deploymentconfig: secretcontroller
-    strategy:
-      activeDeadlineSeconds: 21600
-      resources: {}
-      rollingParams:
-        intervalSeconds: 1
-        maxSurge: 25%
-        maxUnavailable: 25%
-        timeoutSeconds: 600
-        updatePeriodSeconds: 1
-      type: Rolling
-    template:
-      metadata:
-        labels:
-          app: secretcontroller
-          deploymentconfig: secretcontroller
-      spec:
-        containers:
-        - image: puzzle/cryptopus-k8s-secretcontroller@sha256:96f2f6b5c304109b7864037fd6780f85bd2683a1fa9e75eb148c421605e523a6
-          imagePullPolicy: Always
-          name: secretcontroller
-          resources: {}
-          terminationMessagePath: /dev/termination-log
-          terminationMessagePolicy: File
-        dnsPolicy: ClusterFirst
-        restartPolicy: Always
-        schedulerName: default-scheduler
-        securityContext: {}
-        terminationGracePeriodSeconds: 30
-    test: false
-    triggers:
-    - type: ConfigChange
-    - imageChangeParams:
-        automatic: true
-        containerNames:
-        - secretcontroller
-        from:
-          kind: ImageStreamTag
-          name: secretcontroller:latest
-          namespace: pitc-cryptopussecretcontroller-dev
-      type: ImageChange
-```
-
 
 ## Environment Variables
 
