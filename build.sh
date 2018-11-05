@@ -26,7 +26,7 @@ mkdir -p $PWD/build/
 echo "INFO: running install"
 docker run --rm -v $PWD://go/src/$FULL_PACKAGENAME -v $PWD/build/://go/bin -w //go/src/$FULL_PACKAGENAME -e "CGO_ENABLED=0" -e "GOOS=linux" $GO_DOCKER_IMAGE go install -a -installsuffix nocgo .
 echo "INFO: coping Dockerfile"
-cp $PWD/Dockerfile $PWD/build/
+cp $PWD/Dockerfile.build $PWD/build/Dockerfile
 echo "INFO: changing into build dir"
 cd $PWD/build/
 echo "🐳 INFO: building image latest"
