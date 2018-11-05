@@ -17,7 +17,7 @@ spec:
   secretName: mysecret
   id: [ 2256 ]
   refreshTime: 3600
-  cryptopusSecret: my-namespace/cryptopuspuzzlesplattner
+  cryptopusSecret: my-namespace/cryptopusapi
 ```
 
 * `secretName`: is the Name of the Secret that will be created
@@ -33,7 +33,7 @@ You have to create the following Secret with Details of your Cryptopus Instance.
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cryptopuspuzzlesplattner
+  name: cryptopusapi
 type: Opaque
 data:
   CRYPTOPUS_API:
