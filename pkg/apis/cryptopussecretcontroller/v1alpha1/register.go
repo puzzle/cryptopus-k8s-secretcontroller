@@ -21,7 +21,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	cryptopussecretcontroller "puzzle.ch/cryptopussecretcontroller/pkg/apis/cryptopussecretcontroller"
+	cryptopussecretcontroller "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/apis/cryptopussecretcontroller"
 )
 
 // SchemeGroupVersion is group version used to register these objects

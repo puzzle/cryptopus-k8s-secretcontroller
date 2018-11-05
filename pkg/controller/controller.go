@@ -45,14 +45,14 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 
-	samplev1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
-	clientset "puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned"
-	samplescheme "puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned/scheme"
-	informers "puzzle.ch/cryptopussecretcontroller/pkg/client/informers/externalversions/cryptopussecretcontroller/v1alpha1"
-	listers "puzzle.ch/cryptopussecretcontroller/pkg/client/listers/cryptopussecretcontroller/v1alpha1"
+	samplev1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
+	clientset "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned"
+	samplescheme "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned/scheme"
+	informers "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/informers/externalversions/cryptopussecretcontroller/v1alpha1"
+	listers "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/listers/cryptopussecretcontroller/v1alpha1"
 )
 
-const controllerAgentName = "cryptopussecretcontroller"
+const controllerAgentName = "cryptopus-k8s-secretcontroller"
 
 const (
 	// SuccessSynced is used as part of the Event 'reason' when a SecretClaim is synced

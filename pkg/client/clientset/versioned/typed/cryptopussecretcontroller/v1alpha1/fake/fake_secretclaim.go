@@ -19,13 +19,13 @@ limitations under the License.
 package fake
 
 import (
+	v1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
 )
 
 // FakeSecretClaims implements SecretClaimInterface
@@ -34,9 +34,9 @@ type FakeSecretClaims struct {
 	ns   string
 }
 
-var secretclaimsResource = schema.GroupVersionResource{Group: "cryptopussecretcontroller.mobi.ch", Version: "v1alpha1", Resource: "secretclaims"}
+var secretclaimsResource = schema.GroupVersionResource{Group: "cryptopussecretcontroller.puzzle.ch", Version: "v1alpha1", Resource: "secretclaims"}
 
-var secretclaimsKind = schema.GroupVersionKind{Group: "cryptopussecretcontroller.mobi.ch", Version: "v1alpha1", Kind: "SecretClaim"}
+var secretclaimsKind = schema.GroupVersionKind{Group: "cryptopussecretcontroller.puzzle.ch", Version: "v1alpha1", Kind: "SecretClaim"}
 
 // Get takes name of the secretClaim, and returns the corresponding secretClaim object, and an error if there is any.
 func (c *FakeSecretClaims) Get(name string, options v1.GetOptions) (result *v1alpha1.SecretClaim, err error) {

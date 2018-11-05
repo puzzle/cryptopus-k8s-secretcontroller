@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: cryptopuspuzzles
+  name: cryptopusapi
 type: Opaque
 data:
-  CRYPTOPUS_API: aHR0cHM6Ly9jcnlwdG9wdXMucHV6emxlLmNo
+  CRYPTOPUS_API:
   CRYPTOPUS_API_USER:
   CRYPTOPUS_API_TOKEN:

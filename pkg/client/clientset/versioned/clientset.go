@@ -19,10 +19,10 @@ limitations under the License.
 package versioned
 
 import (
+	cryptopussecretcontrollerv1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned/typed/cryptopussecretcontroller/v1alpha1"
 	discovery "k8s.io/client-go/discovery"
 	rest "k8s.io/client-go/rest"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
-	cryptopussecretcontrollerv1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned/typed/cryptopussecretcontroller/v1alpha1"
 )
 
 type Interface interface {

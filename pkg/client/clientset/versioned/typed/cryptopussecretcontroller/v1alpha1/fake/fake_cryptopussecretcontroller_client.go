@@ -19,9 +19,9 @@ limitations under the License.
 package fake
 
 import (
+	v1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned/typed/cryptopussecretcontroller/v1alpha1"
 	rest "k8s.io/client-go/rest"
 	testing "k8s.io/client-go/testing"
-	v1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned/typed/cryptopussecretcontroller/v1alpha1"
 )
 
 type FakeCryptopussecretcontrollerV1alpha1 struct {

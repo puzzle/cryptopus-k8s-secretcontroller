@@ -29,10 +29,10 @@ import (
 	// Uncomment the following line to load the gcp plugin (only required to authenticate against GKE clusters).
 	// _ "k8s.io/client-go/plugin/pkg/client/auth/gcp"
 
-	clientset "puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned"
-	informers "puzzle.ch/cryptopussecretcontroller/pkg/client/informers/externalversions"
-	"puzzle.ch/cryptopussecretcontroller/pkg/signals"
-	"puzzle.ch/cryptopussecretcontroller/pkg/controller"
+	clientset "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned"
+	informers "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/informers/externalversions"
+	"github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/signals"
+	"github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/controller"
 )
 
 var (

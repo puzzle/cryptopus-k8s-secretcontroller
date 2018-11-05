@@ -19,8 +19,8 @@ limitations under the License.
 package cryptopussecretcontroller
 
 import (
-	v1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/client/informers/externalversions/cryptopussecretcontroller/v1alpha1"
-	internalinterfaces "puzzle.ch/cryptopussecretcontroller/pkg/client/informers/externalversions/internalinterfaces"
+	v1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/informers/externalversions/cryptopussecretcontroller/v1alpha1"
+	internalinterfaces "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to each of this group's versions.

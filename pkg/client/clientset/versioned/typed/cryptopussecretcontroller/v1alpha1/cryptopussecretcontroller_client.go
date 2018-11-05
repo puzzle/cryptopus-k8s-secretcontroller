@@ -19,10 +19,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	v1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
+	"github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned/scheme"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
-	"puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned/scheme"
 )
 
 type CryptopussecretcontrollerV1alpha1Interface interface {
@@ -30,7 +30,7 @@ type CryptopussecretcontrollerV1alpha1Interface interface {
 	SecretClaimsGetter
 }
 
-// CryptopussecretcontrollerV1alpha1Client is used to interact with features provided by the cryptopussecretcontroller.mobi.ch group.
+// CryptopussecretcontrollerV1alpha1Client is used to interact with features provided by the cryptopussecretcontroller.puzzle.ch group.
 type CryptopussecretcontrollerV1alpha1Client struct {
 	restClient rest.Interface
 }

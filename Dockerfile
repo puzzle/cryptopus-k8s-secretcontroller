@@ -1,4 +1,4 @@
 FROM scratch
 USER nobody
-COPY ./cryptopussecretcontroller ./
-ENTRYPOINT ["./cryptopussecretcontroller", "-logtostderr", "-v", "4"]
+COPY ./cryptopus-k8s-secretcontroller ./
+ENTRYPOINT ["./cryptopus-k8s-secretcontroller", "-logtostderr"]

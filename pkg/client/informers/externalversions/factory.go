@@ -23,13 +23,13 @@ import (
 	sync "sync"
 	time "time"
 
+	versioned "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned"
+	cryptopussecretcontroller "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/informers/externalversions/cryptopussecretcontroller"
+	internalinterfaces "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/informers/externalversions/internalinterfaces"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	cache "k8s.io/client-go/tools/cache"
-	versioned "puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned"
-	cryptopussecretcontroller "puzzle.ch/cryptopussecretcontroller/pkg/client/informers/externalversions/cryptopussecretcontroller"
-	internalinterfaces "puzzle.ch/cryptopussecretcontroller/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // SharedInformerOption defines the functional option type for SharedInformerFactory.

@@ -19,7 +19,7 @@ limitations under the License.
 package v1alpha1
 
 import (
-	internalinterfaces "puzzle.ch/cryptopussecretcontroller/pkg/client/informers/externalversions/internalinterfaces"
+	internalinterfaces "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/informers/externalversions/internalinterfaces"
 )
 
 // Interface provides access to all the informers in this group version.

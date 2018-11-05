@@ -19,12 +19,12 @@ limitations under the License.
 package v1alpha1
 
 import (
+	v1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
+	scheme "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/client/clientset/versioned/scheme"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
-	v1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
-	scheme "puzzle.ch/cryptopussecretcontroller/pkg/client/clientset/versioned/scheme"
 )
 
 // SecretClaimsGetter has a method to return a SecretClaimInterface.

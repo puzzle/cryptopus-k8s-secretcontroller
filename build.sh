@@ -3,13 +3,13 @@ set -e
 
 
 DOCKER_ORG="${DOCKER_ORG-puzzle}"
-DOCKER_REPO="${DOCKER_REPO-cryptopussecretcontroller}"
+DOCKER_REPO="${DOCKER_REPO-cryptopus-k8s-secretcontroller}"
 DOCKER_REGISTRY="${DOCKER_REGISTRY-docker.io}"
 
 
 GO_DOCKER_IMAGE=golang:1.11
-PACKAGENAME=cryptopussecretcontroller
-FULL_PACKAGENAME=puzzle.ch/$PACKAGENAME
+PACKAGENAME=cryptopus-k8s-secretcontroller
+FULL_PACKAGENAME=github.com/puzzle/$PACKAGENAME
 
 if [ -z "$BUILD_VERSION" ]; then
     TAG=1.0-SNAPSHOT

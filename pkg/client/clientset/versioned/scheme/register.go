@@ -19,12 +19,12 @@ limitations under the License.
 package scheme
 
 import (
+	cryptopussecretcontrollerv1alpha1 "github.com/puzzle/cryptopus-k8s-secretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	serializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	cryptopussecretcontrollerv1alpha1 "puzzle.ch/cryptopussecretcontroller/pkg/apis/cryptopussecretcontroller/v1alpha1"
 )
 
 var Scheme = runtime.NewScheme()
