@@ -1,5 +1,7 @@
 # Cryptopus Secret Controller for Kubernetes / OpenShift
 
+[![Docker Build Status](https://img.shields.io/docker/build/puzzleitc/cryptopus-k8s-secretcontroller.svg)](https://hub.docker.com/r/puzzleitc/cryptopus-k8s-secretcontroller)
+
 This repository implements a Controller for watching SecretClaim Resources as
 defined with a CustomResourceDefinition (CRD) and create Secrets bound to a Cryptopus Account
 
