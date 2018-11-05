@@ -165,10 +165,10 @@ spec:
     local: false
   tags:
   - annotations:
-      openshift.io/imported-from: quay.io/splattner/cryptopussecretcontroller
+      openshift.io/imported-from: puzzle/cryptopus-k8s-secretcontroller
     from:
       kind: DockerImage
-      name: quay.io/splattner/cryptopussecretcontroller
+      name: puzzle/cryptopus-k8s-secretcontroller
     importPolicy: {}
     name: latest
     referencePolicy:
@@ -209,7 +209,7 @@ items:
           deploymentconfig: secretcontroller
       spec:
         containers:
-        - image: quay.io/splattner/cryptopussecretcontroller@sha256:40b1393e1d1c1c1b3c43f79bfd9014bf49adb75f4a1d827143c4da966df4254d
+        - image: puzzle/cryptopus-k8s-secretcontroller@sha256:96f2f6b5c304109b7864037fd6780f85bd2683a1fa9e75eb148c421605e523a6
           imagePullPolicy: Always
           name: secretcontroller
           resources: {}
@@ -231,7 +231,6 @@ items:
           kind: ImageStreamTag
           name: secretcontroller:latest
           namespace: pitc-cryptopussecretcontroller-dev
-        lastTriggeredImage: quay.io/splattner/cryptopussecretcontroller@sha256:40b1393e1d1c1c1b3c43f79bfd9014bf49adb75f4a1d827143c4da966df4254d
       type: ImageChange
 ```
 
